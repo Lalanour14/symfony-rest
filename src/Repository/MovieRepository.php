@@ -17,7 +17,7 @@ class MovieRepository
 
         $list = [];
         $connection = Database::getConnection();
-        $query = $connection->prepare("SELECT *,movie. movie_id ,genre. genre_id FROM movie 
+        $query = $connection->prepare("SELECT *,movie.id movie_id ,genre.id genre_id FROM movie 
         LEFT JOIN genre_movie ON movie.id = genre_movie.id_movie 
         LEFT JOIN genre ON genre.id = genre_movie.id_genre;");
 
@@ -31,7 +31,7 @@ class MovieRepository
             if ($currentMovie != null && $currentMovie->getId() == $line['movie_id']) {
                 $currentMovie->addGenre(new Genre($line['label'], $line['id']));
             } else {
-                $currentMovie = new Movie($line['Title'], $line['Resume'], new DateTime($line['DATE']), $line['duration'], $line['movi_id']);
+                $currentMovie = new Movie($line['Title'], $line['Resume'], new DateTime($line['DATE']), $line['duration'], $line['movie_id']);
                 $list[] = $currentMovie;
 
                 if (isset($line['genre_id'])) {
@@ -54,7 +54,7 @@ class MovieRepository
         $query->execute();
 
         foreach ($query->fetchAll() as $line) {
-            return new Movie($line['Title'], $line['Resume'], new DateTime($line['Date']), $line['duration'], $line['id']);
+            return new Movie($line['Title'], $line['Resume'], new DateTime($line['DATE']), $line['duration'], $line['id']);
         }
         return null;
     }
